@@ -10,3 +10,13 @@ services:
     ports:
       - 5432:5432
     restart: always
+  marketapp:
+    build: './'
+    image: marketapp:latest
+    restart: always
+    environment:
+      DATABASE_URL: 'jdbc:postgresql://marketpostgres:5432/postgres'
+    ports:
+      - 80:8080
+    depends_on:
+      - marketpostgres
