@@ -4,6 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
                    logicalFilePath="db/changelog/init_changelog.xml">
 
+
     <changeSet id="create table SHOP_UNIT_ENTITY" author="musa_abdurakhmanov">
         <createTable tableName="SHOP_UNIT_ENTITY">
             <column name="ID" remarks="Identifier" type="UUID" >
@@ -18,24 +19,32 @@
             <column name="TYPE" type="VARCHAR(8)"/>
             <column name="NAME" type="VARCHAR(255)"/>
             <column name="PRICE" type="INTEGER"/>
-            <column name="PARENT_ID" type="UUID">
-                <constraints foreignKeyName="PARENT_ID" references="SHOP_UNIT_ENTITY(ID)"/>
-            </column>
+            <column name="PARENT_ID" type="UUID"/>
         </createTable>
     </changeSet>
 
     <changeSet id="create table SHOP_UNIT_HISTORY" author="musa_abdurakhmanov">
         <createTable tableName="SHOP_UNIT_HISTORY">
-            <column name="ID" remarks="Identifier" type="UUID" >
+            <column name="ID" remarks="Identifier" type="BIGINT" autoIncrement="true">
                 <constraints unique="true" primaryKey="true"/>
             </column>
             <column name="UPDATED_DATE" remarks="Updated date" type="TIMESTAMP(6)">
                 <constraints nullable="false"/>
             </column>
+            <column name="TYPE" type="VARCHAR(8)"/>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="PRICE" type="INTEGER"/>
             <column name="SHOP_UNIT_ENTITY_ID" type="UUID">
                 <constraints foreignKeyName="SHOP_UNIT_ENTITY_ID" references="SHOP_UNIT_ENTITY(ID)"/>
             </column>
+            <column name="PARENT_SHOP_UNIT_ENTITY_ID" type="UUID"/>
         </createTable>
+    </changeSet>
+
+    <changeSet id="create indexes" author="musa_abdurakhmanov">
+        <createIndex indexName="index_id" tableName="SHOP_UNIT_ENTITY" unique="true">
+            <column name="ID"/>
+        </createIndex>
     </changeSet>
 
 </databaseChangeLog>

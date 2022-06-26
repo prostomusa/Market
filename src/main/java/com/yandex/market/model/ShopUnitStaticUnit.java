@@ -1,5 +1,6 @@
 package com.yandex.market.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yandex.market.enums.ShopUnitType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Validated
 @Getter
@@ -20,9 +22,10 @@ public class ShopUnitStaticUnit {
 
     @NotNull
     @Schema(type = "string",
+            format = "uuid",
             description = "Уникальный идентфикатор",
             example = "3fa85f64-5717-4562-b3fc-2c963f66a333")
-    private String id;
+    private UUID id;
 
     @NotNull
     @Schema(type = "string",
@@ -31,9 +34,10 @@ public class ShopUnitStaticUnit {
 
     @Schema(type = "string",
             nullable = true,
+            format = "uuid",
             description = "UUID родительской категории",
             example = "3fa85f64-5717-4562-b3fc-2c963f66a333")
-    private String parentId;
+    private UUID parentId;
 
     @NotNull
     @Schema(type = "string",
@@ -53,7 +57,7 @@ public class ShopUnitStaticUnit {
     @Schema(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             type = "string",
             description = "Время обновления добавляемых товаров/категорий.")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updateDate;
 
 }

@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Validated
 @Getter
@@ -18,9 +19,10 @@ public class ShopUnitImport {
 
     @NotNull
     @Schema(type = "string",
+            format = "uuid",
             description = "Уникальный идентфикатор",
             example = "3fa85f64-5717-4562-b3fc-2c963f66a333")
-    private String id;
+    private UUID id;
 
     @NotNull
     @Schema(type = "string",
@@ -29,9 +31,10 @@ public class ShopUnitImport {
 
     @Schema(type = "string",
             nullable = true,
+            format = "uuid",
             description = "UUID родительской категории",
             example = "3fa85f64-5717-4562-b3fc-2c963f66a333")
-    private String parentId;
+    private UUID parentId;
 
     @NotNull
     @Schema(type = "string",

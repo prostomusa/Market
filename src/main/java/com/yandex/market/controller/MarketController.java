@@ -1,10 +1,10 @@
 package com.yandex.market.controller;
 
-import com.yandex.market.exception.NotFoundException;
 import com.yandex.market.model.Error;
 import com.yandex.market.model.ShopUnit;
 import com.yandex.market.model.ShopUnitImportRequest;
 import com.yandex.market.model.ShopUnitStatisticResponse;
+import com.yandex.market.service.ShopUnitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -16,14 +16,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("")
+@RequiredArgsConstructor
 @Tag(name = "Вступительное задание в Летнюю Школу Бэкенд Разработки Яндекса 2022")
 public class MarketController {
+
+    private final ShopUnitService shopUnitService;
 
     private static final String IMPORT_DESCRIPTION = "Импортирует новые товары и/или категории. Товары/категории импортированные повторно обновляют текущие. Изменение типа элемента с товара на категорию или с категории на товар не допускается. Порядок элементов в запросе является произвольным.\n" +
             "\n" +
@@ -52,8 +56,8 @@ public class MarketController {
             )
     })
     @PostMapping("/imports")
-    public ResponseEntity<Object> imports(@RequestBody ShopUnitImportRequest shopUnitImportRequest) {
-        return ResponseEntity.ok().build();
+    public CompletableFuture<ResponseEntity> imports(@RequestBody ShopUnitImportRequest shopUnitImportRequest) {
+        return shopUnitService.importShopUnits(shopUnitImportRequest);
     }
 
     @Operation(
@@ -77,11 +81,8 @@ public class MarketController {
             )
     })
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> delete(@PathVariable UUID id) {
-        if ("ui".equals(id)) {
-            throw new NotFoundException();
-        }
-        return ResponseEntity.ok().build();
+    public CompletableFuture<ResponseEntity> delete(@PathVariable UUID id) {
+        return shopUnitService.deleteShopUnit(id);
     }
 
     @Operation(
@@ -107,8 +108,8 @@ public class MarketController {
             )
     })
     @GetMapping("/nodes/{id}")
-    public ResponseEntity<Object> getNodes(@PathVariable UUID id) {
-        return ResponseEntity.ok().build();
+    public CompletableFuture<ResponseEntity<ShopUnit>> getNodes(@PathVariable UUID id) {
+        return shopUnitService.getNodes(id);
     }
 
     @Operation(
@@ -125,8 +126,8 @@ public class MarketController {
             )
     })
     @GetMapping("/sales")
-    public ResponseEntity<Object> sales(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") LocalDateTime date) {
-        return ResponseEntity.ok().build();
+    public CompletableFuture<ResponseEntity<ShopUnitStatisticResponse>> sales(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") LocalDateTime date) {
+        return shopUnitService.getSales(date);
     }
 
     @Operation(
@@ -152,9 +153,9 @@ public class MarketController {
             )
     })
     @GetMapping("/node/{id}/statistic")
-    public ResponseEntity<Object> getStatistic(@PathVariable UUID id,
+    public CompletableFuture<ResponseEntity<ShopUnitStatisticResponse>> getStatistic(@PathVariable UUID id,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") LocalDateTime dateStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") LocalDateTime dateEnd) {
-        return ResponseEntity.ok().build();
+        return shopUnitService.getStatistic(id, dateStart, dateEnd);
     }
 }
