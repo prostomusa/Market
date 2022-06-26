@@ -22,8 +22,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ShopUnitEntity implements Serializable {
 
-    private static final String PARENT_QUERY = "(SELECT sue.id FROM SHOP_UNIT_ENTITY sue WHERE sue.id = parent_id)";
-
     @Id
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -46,10 +44,6 @@ public class ShopUnitEntity implements Serializable {
 
     @Column
     private LocalDateTime updatedDate;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinFormula(value = PARENT_QUERY)
-    private ShopUnitEntity parentEntity;
 
     @OneToMany(mappedBy = "shopUnitEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ShopUnitHistory> history;
