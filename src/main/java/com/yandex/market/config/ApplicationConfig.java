@@ -27,7 +27,7 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class ApplicationConfig implements AsyncConfigurer {
 
-    public static final int API_DIGITAL_LEAGUE_USERS_THREAD_POOL = 100;
+    public static final int API_USERS_THREAD_POOL = 100;
 
     @Bean
     public CustomRestTemplateCustomizer customRestTemplateCustomizer() {
@@ -54,9 +54,9 @@ public class ApplicationConfig implements AsyncConfigurer {
     @Bean
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(API_DIGITAL_LEAGUE_USERS_THREAD_POOL);
-        executor.setMaxPoolSize(API_DIGITAL_LEAGUE_USERS_THREAD_POOL);
-        executor.setQueueCapacity(API_DIGITAL_LEAGUE_USERS_THREAD_POOL * 2);
+        executor.setCorePoolSize(API_USERS_THREAD_POOL);
+        executor.setMaxPoolSize(API_USERS_THREAD_POOL);
+        executor.setQueueCapacity(API_USERS_THREAD_POOL * 2);
         return executor;
     }
 
